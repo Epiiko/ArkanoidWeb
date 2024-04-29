@@ -68,9 +68,10 @@ function ballMove() {
   }
 }
 function paddleMove() {
-    if(rightPressed){
+    //movemos y limitamos el movimiento al borde del canvas
+    if(rightPressed && paddleX<canvas.width - paddleWidth){
         paddleX += speedMove;
-    }else if(leftPressed){
+    }else if(leftPressed && paddleX>0){
         paddleX -=speedMove
     }
 }
