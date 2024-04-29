@@ -3,7 +3,7 @@ const ctx = canvas.getContext("2d");
 canvas.width = 488;
 canvas.height = 400;
 
-// Variables de la pelota
+//-------------------------Variables de la pelota------------------------------------
 const ballRadius = 3;
 //posi pelota en mitad del tablero y abajo del todo -30
 let x = canvas.width / 2;
@@ -12,14 +12,18 @@ let y = canvas.height - 30;
 let dx = 2;
 let dy = -2;
 
-//Variables de la paleta
+//-----------------------------Variables de la paleta--------------------------------
 const paddleWidth = 70;
 const paddleHeight= 10;
+const speedMove= 5;
 //colocamos el paddle en la mitad restandole al canvas la anchura y haciendo su mitad
 let paddleX = (canvas.width - paddleWidth) /2
 //colocamos el paddle en su posicion por encima del final
 let paddleY = canvas.height - paddleHeight -15;
+let rightPressed =false;
+let leftPressed =false;
 
+//-----------------------------funcionalidad------------------------------------------
 function drawBall() {
   ctx.beginPath();
   //posiciones de incicio, arqueo, duracion del arco
@@ -30,9 +34,11 @@ function drawBall() {
 }
 
 function drawPaddle() {
-    ctx.fillStyle = "#fff";
+    ctx.fillStyle = "#red";
+    //coord x, coord y, ancho, alto
     ctx.fillRect(paddleX, paddleY, paddleWidth, paddleHeight)
 }
+
 function drawBricks() {}
 function collisionAlert() {}
 
@@ -57,18 +63,48 @@ function ballMove() {
   //   el radio de la pelota
   if (y + dy > canvas.height - ballRadius) {
     console.log("Game Over MADAFAKA");
-    setTimeout(()=>{
-         document.location.reload();
-    },1000)
+    document.location.reload()
    
   }
 }
-function paddleMove() {}
+function paddleMove() {
+    if(rightPressed){
+        paddleX += speedMove;
+    }else if(leftPressed){
+        paddleX -=speedMove
+    }
+}
 function cleanCanvas() {
   //limpiamos lo dibujado para que quede como que actuliza al borrar lo anterior
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
+function initEvents(){
+    document.addEventListener("keydown" , keyDownHandler)
+    document.addEventListener("keyup" , keyUpHandler)
+    //en caso de que se de el evento no vamos a pinta aqui solo actualizamos variables
+    function keyDownHandler(ev){
+        const {key} = ev;
+        /*realizamos el if-elseif para que no reciba dos respuestas seguidas y solo tome
+        una direccion*/
+        if(key==='right' || key==='ArrowRight'){
+            rightPressed=true;
+        }else if(key=='left' || key==='ArrowLeft'){
+            leftPressed=true;
+        }
+    }
+    function keyUpHandler(ev){
+        const {key} = ev;
+        /*realizamos el if-elseif para que no reciba dos respuestas seguidas y solo tome
+        una direccion*/
+        if(key==='right' || key==='ArrowRight'){
+            rightPressed=false;
+        }else if(key=='left' || key==='ArrowLeft'){
+            leftPressed=false;
+        }
+    }
+}
 function drawCanvas() {
+    console.log("LEFT ->"  + leftPressed + "RIGHT ->" + rightPressed );
   cleanCanvas();
   //funcion para realizar los cambios en pantalla llamandose a si mismo frame por frame
   //hay que dibujar los elementos
@@ -82,3 +118,4 @@ function drawCanvas() {
   window.requestAnimationFrame(drawCanvas);
 }
 drawCanvas();
+initEvents();
