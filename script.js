@@ -12,6 +12,14 @@ let y = canvas.height - 30;
 let dx = 2;
 let dy = -2;
 
+//Variables de la paleta
+const paddleWidth = 70;
+const paddleHeight= 10;
+//colocamos el paddle en la mitad restandole al canvas la anchura y haciendo su mitad
+let paddleX = (canvas.width - paddleWidth) /2
+//colocamos el paddle en su posicion por encima del final
+let paddleY = canvas.height - paddleHeight -15;
+
 function drawBall() {
   ctx.beginPath();
   //posiciones de incicio, arqueo, duracion del arco
@@ -21,7 +29,10 @@ function drawBall() {
   ctx.closePath();
 }
 
-function drawPaddle() {}
+function drawPaddle() {
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(paddleX, paddleY, paddleWidth, paddleHeight)
+}
 function drawBricks() {}
 function collisionAlert() {}
 
@@ -36,12 +47,21 @@ function ballMove() {
   if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
     dx = -dx;
   }
-//   pared superior -> si la posicion mas el movimiento es menor que el radio de la bola
-//   rebota y cambia direccion
-  if (y+dy<ballRadius){
-    dy=-dy
-  }
   //------------------------------EJE Y-------------------------------------
+  /*  pared superior -> si la posicion mas el movimiento es menor que el radio de la bola
+   rebota y cambia direccion */
+  if (y + dy < ballRadius) {
+    dy = -dy;
+  }
+  //   pared inferior-> si la posicion mas el movimiento es mayor que la altura del canvas mas
+  //   el radio de la pelota
+  if (y + dy > canvas.height - ballRadius) {
+    console.log("Game Over MADAFAKA");
+    setTimeout(()=>{
+         document.location.reload();
+    },1000)
+   
+  }
 }
 function paddleMove() {}
 function cleanCanvas() {
