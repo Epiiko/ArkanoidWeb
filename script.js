@@ -9,8 +9,8 @@ const ballRadius = 3;
 let x = canvas.width / 2;
 let y = canvas.height - 30;
 //velocidad pelota
-let dx = 2;
-let dy = -2;
+let dx = 4;
+let dy = -4;
 
 //-----------------------------Variables de la paleta--------------------------------
 const paddleWidth = 70;
@@ -60,8 +60,14 @@ function ballMove() {
     dy = -dy;
   }
   //   pared inferior-> si la posicion mas el movimiento es mayor que la altura del canvas mas
-  //   el radio de la pelota
-  if (y + dy > canvas.height - ballRadius) {
+  //   el radio de la pelota o toca la pala
+  const ballContactPaddleAtX = x > paddleX && x < paddleX + paddleWidth //contacto en eje x
+  
+  if(
+    false
+  ){
+    dy -dy;
+  }else if (y + dy > canvas.height - ballRadius) {
     console.log("Game Over MADAFAKA");
     document.location.reload()
    
