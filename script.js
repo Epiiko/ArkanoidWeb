@@ -77,7 +77,7 @@ function drawBricks() {
             const actualBrick=bricks[i][j];
             //si encontramos destruido no lo pintamos y seguimos a la siguiente vuelta
             if(actualBrick.status===brickStatus.BROKEN) continue;
-            ctx.fillStyle= 'yellow';
+            ctx.fillStyle= 'white';
             ctx.rect(
                 actualBrick.x,
                 actualBrick.y,
