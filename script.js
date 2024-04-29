@@ -4,7 +4,7 @@ canvas.width = 488;
 canvas.height = 400;
 
 //-------------------------Variables de la pelota------------------------------------
-const ballRadius = 5
+const ballRadius = 4;
 //posi pelota en mitad del tablero y abajo del todo -30
 let x = canvas.width / 2;
 let y = canvas.height - 30;
@@ -22,7 +22,38 @@ let paddleX = (canvas.width - paddleWidth) / 2;
 let paddleY = canvas.height - paddleHeight - 10;
 let rightPressed = false;
 let leftPressed = false;
-
+//-----------------------------Variables de los ladrillos--------------------------------
+const brickRowCount= 6;
+const brickColumnCount= 13;
+const brickWidth=30;
+const brickHeight =14;
+const brickPadding= 4;
+const brickTopStart = 80;//donde van a empezar los ladrillos por arriba
+const brickLeftStart = 30;//donde van a empezar los ladrillos por izqd
+const brickStatus ={
+    EXIST: 1,
+    BROKEN: 0
+}
+const bricks=[];
+ /*recorremos las columnas de los ladrillos a colocar e iniciamos un array dentro de cada
+ iteraccion para inicializar las filas*/
+for (let i = 0; i < brickColumnCount; i++) {
+    bricks[i] = [];
+    for (let j = 0; j < brickRowCount; j++) {
+        // colocamos los ladrillos uno detras de otro respetando el espacio entr ellos
+       const brickX = i * (brickWidth + brickPadding) + brickLeftStart
+       const brickY = j * (brickHeight + brickPadding) + brickTopStart
+       //asignamos colores aleatorios
+       const rand= Math.floor(Math.random()*8);
+       //Guardamos la info en cada ladrillo creando un objeto para ello
+       bricks[i][j]= {
+        x: brickX,
+        y: brickY,
+        status: brickStatus.EXIST,
+        color: rand
+       }
+    }
+}
 //-----------------------------funcionalidades------------------------------------------
 function drawBall() {
   ctx.beginPath();
@@ -32,7 +63,6 @@ function drawBall() {
   ctx.fill();
   ctx.closePath();
 }
-
 function drawPaddle() {
  let img=new Image();
  img.src="./paddle.png"
@@ -40,8 +70,24 @@ function drawPaddle() {
   //coord x, coord y, ancho, alto
   ctx.drawImage(img, paddleX, paddleY , paddleWidth, paddleHeight);
 }
-
-function drawBricks() {}
+function drawBricks() {
+    //recoremos bricks
+    for (let i = 0; i < brickColumnCount; i++) {
+        for (let j = 0; j < brickRowCount; j++) {
+            const actualBrick=bricks[i][j];
+            //si encontramos destruido no lo pintamos y seguimos a la siguiente vuelta
+            if(actualBrick.status===brickStatus.BROKEN) continue;
+            ctx.fillStyle= 'yellow';
+            ctx.rect(
+                actualBrick.x,
+                actualBrick.y,
+                brickWidth,
+                brickHeight
+            )
+            ctx.fill();
+        }
+    }
+}
 function collisionAlert() {}
 
 function ballMove() {
